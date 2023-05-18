@@ -1,0 +1,11 @@
+[user]
+	name = Tolga Karataş
+	email = tolgakaratas@gmail.com
+	signingkey = tolgakaratas@gmail.com
+
+[github]
+	user = tolgakaratas
+
+[commit]
+        gpgsign = true
+

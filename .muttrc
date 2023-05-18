@@ -1,0 +1,24 @@
+# Mutt configuration file
+
+# Reset all variables
+reset all
+
+# Set mailbox location
+set folder = "~/.Mail/local"
+
+# Load the custom profile selected on the command line
+source `[ -f ~/.muttrc.profile.$MUTT_PROFILE ] && echo "~/.muttrc.profile.$MUTT_PROFILE" || echo "/dev/null"`
+
+
+# Example profile: ~/.muttrc.profile.example
+
+# set folder = "~/.Mail/example.org/example"
+# alternates -group example user\@example.org
+# my_hdr From: Example User <user@example.org>
+# my_hdr Bcc: user@example.org
+# set signature = "~/.signature.example.org"
+
+
+# Source all executable files from $HOME/.muttrc.d
+source "/bin/run-parts --test $HOME/.muttrc.d | xargs cat |"
+

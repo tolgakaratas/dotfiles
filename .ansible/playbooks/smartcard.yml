@@ -1,0 +1,44 @@
+---
+
+- hosts: localhost
+
+  tasks:
+
+    - name: Install packages required for smartcard support
+      package:
+        name: [ 'scdaemon' ]
+        state: 'present'
+      become: True
+
+    - name: Make sure that ~/.gnupg/gpg-agent.conf exists
+      command: touch ~/.gnupg/gpg-agent.conf
+      args:
+        creates: '~/.gnupg/gpg-agent.conf'
+
+    - name: Enable ssh support in gpg-agent
+      lineinfile:
+        dest: '~/.gnupg/gpg-agent.conf'
+        regexp: '^enable-ssh-support'
+        line: 'enable-ssh-support'
+        state: 'present'
+
+    # Based on: https://mlohr.com/gpg-agent-ssh-gnome/
+    - name: Create required configuration directory
+      file:
+        path: '~/.config/autostart'
+        state: 'directory'
+        mode: '0755'
+
+    - name: Copy system-wide gnome-keyring-ssh config to user directory
+      copy:
+        src: '/etc/xdg/autostart/gnome-keyring-ssh.desktop'
+        dest: '~/.config/autostart/gnome-keyring-ssh.desktop'
+        remote_src: True
+        force: False
+
+    - name: Disable SSH support in gnome-keyring
+      lineinfile:
+        dest: '~/.config/autostart/gnome-keyring-ssh.desktop'
+        regexp: '^Hidden='
+        line: 'Hidden=true'
+        state: 'present'
